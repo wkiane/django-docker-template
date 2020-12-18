@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - static_data:/vol/web
+    environment:
+      - SECRET_KEY=${SECRET_KEY:?err}
+      - ALLOWED_HOSTS=127.0.0.1,localhost
+
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+  db:
+    image: postgres:10-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME:?err}
+      - POSTGRES_USER=${DB_USER:?err}
+      - POSTGRES_PASSWORD=${DB_PASS:?err}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  static_data:
+  pgdata:
