@@ -15,6 +15,7 @@ RUN mkdir /app
 COPY ./app /app
 WORKDIR /app
 COPY ./scripts /scripts
+COPY ./.env /.env
 
 RUN chmod +x /scripts/*
 
